@@ -3,7 +3,7 @@
 [![Crates.io](https://img.shields.io/crates/v/qwen3_tts.svg)](https://crates.io/crates/qwen3_tts)
 [![License](https://img.shields.io/crates/l/qwen3_tts.svg)](https://github.com/juntao/qwen3_tts_rs/blob/main/LICENSE)
 
-A Rust implementation of the Qwen3 Text-to-Speech (TTS) model inference. This project provides two cross-platform CLI tools suitable for agentic skills.
+A Rust implementation of the Qwen3 Text-to-Speech (TTS) model inference. This project provides two cross-platform CLI tools suitable for agentic skills for AI agents and bots.
 
 - **tts** generates voice wav files from input text and named voice characters.
 - **voice_clone** generates voice wav files from input text and reference audio files.
