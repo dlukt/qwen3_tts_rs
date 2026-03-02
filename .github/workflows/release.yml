@@ -85,10 +85,38 @@ jobs:
         if: matrix.backend == 'mlx'
         run: cargo build --release --no-default-features --features mlx
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate tokenizers
+        run: |
+          pip install huggingface_hub transformers
+          models=(
+            Qwen3-TTS-12Hz-0.6B-CustomVoice
+            Qwen3-TTS-12Hz-0.6B-Base
+            Qwen3-TTS-12Hz-1.7B-CustomVoice
+            Qwen3-TTS-12Hz-1.7B-Base
+            Qwen3-TTS-12Hz-1.7B-VoiceDesign
+          )
+          for model in "${models[@]}"; do
+            mkdir -p "tokenizers/${model}"
+            huggingface-cli download "Qwen/${model}" --local-dir "_hf_tmp/${model}"
+            python3 -c "
+          from transformers import AutoTokenizer
+          tok = AutoTokenizer.from_pretrained('_hf_tmp/${model}', trust_remote_code=True)
+          tok.backend_tokenizer.save('tokenizers/${model}/tokenizer.json')
+          print('Saved tokenizers/${model}/tokenizer.json')
+          "
+          done
+          rm -rf _hf_tmp
+
       - name: Package release
         run: |
           mkdir ${{ matrix.asset-name }}
           cp target/release/tts target/release/voice_clone ${{ matrix.asset-name }}/
+          cp -r tokenizers ${{ matrix.asset-name }}/tokenizers
           if [ "${{ matrix.backend }}" = "mlx" ]; then
             cp target/release/build/qwen3_tts-*/out/lib/mlx.metallib ${{ matrix.asset-name }}/
           fi

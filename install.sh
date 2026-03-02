@@ -52,7 +52,7 @@ detect_platform() {
             echo "  1) CUDA 12.8 (Recommended)"
             echo "  2) CPU only"
             printf "Select variant [1]: "
-            read -r variant
+            read -r variant </dev/tty
             variant="${variant:-1}"
             if [ "$variant" = "1" ]; then
                 USE_CUDA="1"
@@ -143,7 +143,7 @@ download_models() {
     echo "  1) 0.6B (Recommended)"
     echo "  2) 1.7B"
     printf "Select model [1]: "
-    read -r model_choice
+    read -r model_choice </dev/tty
     model_choice="${model_choice:-1}"
 
     if [ "$model_choice" = "2" ]; then
@@ -159,10 +159,10 @@ download_models() {
     local models_dir="${INSTALL_DIR}/models"
     mkdir -p "$models_dir"
 
-    # Ensure huggingface_hub and transformers are available
+    # Ensure huggingface-cli is available
     if ! command -v huggingface-cli &>/dev/null; then
-        info "Installing huggingface_hub and transformers..."
-        pip install -q huggingface_hub transformers
+        info "Installing huggingface_hub..."
+        pip install -q huggingface_hub
     fi
 
     for model in "$CUSTOM_VOICE_MODEL" "$BASE_MODEL"; do
@@ -174,19 +174,11 @@ download_models() {
             huggingface-cli download "Qwen/${model}" --local-dir "$model_dir"
             ok "${model} downloaded."
         fi
-    done
 
-    # Generate tokenizer.json files
-    info "Generating tokenizer.json files..."
-    python3 -c "
-from transformers import AutoTokenizer
-for model in ['${CUSTOM_VOICE_MODEL}', '${BASE_MODEL}']:
-    path = '${models_dir}/' + model
-    tok = AutoTokenizer.from_pretrained(path, trust_remote_code=True)
-    tok.backend_tokenizer.save(path + '/tokenizer.json')
-    print(f'Saved {path}/tokenizer.json')
-"
-    ok "Tokenizers generated."
+        # Copy pre-generated tokenizer from the release asset
+        cp "${INSTALL_DIR}/tokenizers/${model}/tokenizer.json" "${model_dir}/tokenizer.json"
+    done
+    ok "Models ready."
 }
 
 # ---------------------------------------------------------------------------
