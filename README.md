@@ -10,6 +10,11 @@ A Rust implementation of the Qwen3 Text-to-Speech (TTS) model inference. This pr
 
 Supports two backends: **libtorch** (via the `tch` crate, cross-platform with optional CUDA) and **MLX** (Apple Silicon native via Metal GPU). Loads model weights directly from safetensors files and re-implements the complete neural network forward pass in Rust.
 
+Learn more:
+* [A Rust implementation / CLI for Qwen3's ASR (Automatic Speech Recognition or Speech-to-Text) models](https://github.com/second-state/qwen3_asr_rs)
+* [An OpenAI compatible API server for audio / speech](https://github.com/second-state/qwen3_audio_api/tree/main/rust)
+* An OpenClaw SKILL for voice generation. Tell your lobster to read this: https://raw.githubusercontent.com/second-state/qwen3_tts_rs/refs/heads/main/skills/install.md
+
 ## Quick Start
 
 ### 1. Download the release
