@@ -108,6 +108,41 @@ impl Device {
     pub fn gpu() -> Self {
         Device::Gpu(0)
     }
+
+    /// Best available device for the active backend.
+    ///
+    /// On `tch-backend`, this selects CUDA device 0 when CUDA is available,
+    /// otherwise falls back to CPU.
+    ///
+    /// On `mlx`, this selects GPU (Metal) device 0.
+    pub fn auto() -> Self {
+        #[cfg(feature = "tch-backend")]
+        {
+            if tch::Cuda::is_available() {
+                Device::gpu()
+            } else {
+                Device::Cpu
+            }
+        }
+
+        #[cfg(feature = "mlx")]
+        {
+            Device::gpu()
+        }
+    }
+
+    /// Returns `true` when GPU execution is available for the active backend.
+    pub fn is_gpu_available() -> bool {
+        #[cfg(feature = "tch-backend")]
+        {
+            tch::Cuda::is_available()
+        }
+
+        #[cfg(feature = "mlx")]
+        {
+            true
+        }
+    }
 }
 
 #[cfg(feature = "tch-backend")]

@@ -123,7 +123,7 @@ impl Qwen3TTSTokenizer {
     ///
     /// A new `Qwen3TTSTokenizer` instance.
     pub fn from_pretrained(pretrained_model_name_or_path: &str) -> Result<Self> {
-        Self::from_pretrained_with_device(pretrained_model_name_or_path, Device::Cpu)
+        Self::from_pretrained_with_device(pretrained_model_name_or_path, Device::auto())
     }
 
     /// Load a tokenizer from a pretrained model with a specific device.

@@ -73,7 +73,17 @@ fn main() -> anyhow::Result<()> {
 
     // Step 1: Load model
     println!("Loading model from: {}", model_path);
-    let device = Device::Cpu;
+    let device = Device::auto();
+    println!(
+        "Using device: {}",
+        match device {
+            Device::Cpu => "CPU".to_string(),
+            Device::Gpu(index) => format!("GPU({index})"),
+        }
+    );
+    if matches!(device, Device::Cpu) && !Device::is_gpu_available() {
+        println!("GPU backend unavailable in this build/runtime, falling back to CPU.");
+    }
     let inference = TTSInference::new(Path::new(model_path), device)?;
 
     // Step 2: Load speaker encoder from the same weights

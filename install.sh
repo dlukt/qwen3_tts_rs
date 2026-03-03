@@ -45,11 +45,13 @@ detect_platform() {
 
     # CUDA detection (Linux x86_64 only)
     USE_CUDA=""
+    CUDA_RUNTIME=""
     if [ "$OS" = "linux" ] && [ "$ARCH" = "x86_64" ]; then
         if command -v nvidia-smi &>/dev/null && nvidia-smi --query-gpu=driver_version --format=csv,noheader &>/dev/null; then
             CUDA_DRIVER=$(nvidia-smi --query-gpu=driver_version --format=csv,noheader 2>/dev/null | head -1)
-            info "NVIDIA GPU detected (driver ${CUDA_DRIVER})."
-            echo "  1) CUDA 12.8 (Recommended)"
+            CUDA_RUNTIME=$(nvidia-smi 2>/dev/null | sed -n 's/.*CUDA Version: \\([0-9.]*\\).*/\\1/p' | head -1)
+            info "NVIDIA GPU detected (driver ${CUDA_DRIVER}, CUDA runtime ${CUDA_RUNTIME:-unknown})."
+            echo "  1) CUDA-enabled build (libtorch cu128, compatible with CUDA runtime >= 12.8)"
             echo "  2) CPU only"
             printf "Select variant [1]: "
             read -r variant </dev/tty
@@ -118,7 +120,7 @@ download_cuda_libtorch() {
         return
     fi
 
-    info "Downloading CUDA libtorch (this may take a while)..."
+    info "Downloading CUDA libtorch (cu128; works on CUDA runtime >= 12.8, including CUDA 13.x drivers)..."
     local url="https://download.pytorch.org/libtorch/cu128/libtorch-cxx11-abi-shared-with-deps-2.7.1%2Bcu128.zip"
     local temp_dir
     temp_dir=$(mktemp -d)

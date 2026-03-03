@@ -237,7 +237,7 @@ unzip libtorch-cxx11-abi-shared-with-deps-2.7.1+cpu.zip
 curl -LO https://github.com/second-state/libtorch-releases/releases/download/v2.7.1/libtorch-cxx11-abi-aarch64-2.7.1.tar.gz
 tar xzf libtorch-cxx11-abi-aarch64-2.7.1.tar.gz
 
-# Linux x86_64 (CUDA 12.8)
+# Linux x86_64 (CUDA build: cu128; compatible with newer drivers such as CUDA 13.x runtime)
 curl -LO https://download.pytorch.org/libtorch/cu128/libtorch-cxx11-abi-shared-with-deps-2.7.1%2Bcu128.zip
 unzip libtorch-cxx11-abi-shared-with-deps-2.7.1+cu128.zip
 ```
@@ -298,7 +298,7 @@ use std::path::Path;
 fn main() -> anyhow::Result<()> {
     let inference = TTSInference::new(
         Path::new("models/Qwen3-TTS-12Hz-0.6B-CustomVoice"),
-        Device::Cpu,
+        Device::auto(),
     )?;
 
     let (waveform, sample_rate) = inference.generate(
@@ -338,7 +338,7 @@ use qwen3_tts::tensor::Device;
 fn main() -> anyhow::Result<()> {
     let inference = TTSInference::new(
         Path::new("models/Qwen3-TTS-12Hz-1.7B-CustomVoice"),
-        Device::Cpu,
+        Device::auto(),
     )?;
 
     // Generate with instruction control
@@ -382,7 +382,7 @@ use std::path::Path;
 use qwen3_tts::tensor::Device;
 
 fn main() -> anyhow::Result<()> {
-    let device = Device::Cpu;
+    let device = Device::auto();
     let model_path = Path::new("models/Qwen3-TTS-12Hz-0.6B-Base");
 
     // Load model and speaker encoder
@@ -427,7 +427,7 @@ use std::path::Path;
 use qwen3_tts::tensor::Device;
 
 fn main() -> anyhow::Result<()> {
-    let device = Device::Cpu;
+    let device = Device::auto();
     let model_path = Path::new("models/Qwen3-TTS-12Hz-0.6B-Base");
 
     // Load model and speaker encoder

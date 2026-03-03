@@ -182,7 +182,7 @@ impl Qwen3TTSModel {
     ///
     /// A new `Qwen3TTSModel` instance.
     pub fn from_pretrained(pretrained_model_name_or_path: &str) -> Result<Self> {
-        Self::from_pretrained_with_device(pretrained_model_name_or_path, Device::Cpu)
+        Self::from_pretrained_with_device(pretrained_model_name_or_path, Device::auto())
     }
 
     /// Load a model with a specific device.
