@@ -230,16 +230,12 @@ Download and extract libtorch for your platform:
 
 ```bash
 # Linux x86_64 (CPU)
-curl -LO https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.7.1%2Bcpu.zip
-unzip libtorch-cxx11-abi-shared-with-deps-2.7.1+cpu.zip
-
-# Linux ARM64 (CPU)
-curl -LO https://github.com/second-state/libtorch-releases/releases/download/v2.7.1/libtorch-cxx11-abi-aarch64-2.7.1.tar.gz
-tar xzf libtorch-cxx11-abi-aarch64-2.7.1.tar.gz
+curl -LO https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-2.10.0%2Bcpu.zip
+unzip libtorch-shared-with-deps-2.10.0+cpu.zip
 
 # Linux x86_64 (CUDA build: cu128; compatible with newer drivers such as CUDA 13.x runtime)
-curl -LO https://download.pytorch.org/libtorch/cu128/libtorch-cxx11-abi-shared-with-deps-2.7.1%2Bcu128.zip
-unzip libtorch-cxx11-abi-shared-with-deps-2.7.1+cu128.zip
+curl -LO https://download.pytorch.org/libtorch/cu128/libtorch-shared-with-deps-2.10.0%2Bcu128.zip
+unzip libtorch-shared-with-deps-2.10.0+cu128.zip
 ```
 
 #### Set environment variables
@@ -507,7 +503,7 @@ Apache-2.0
 If you already have Python installed, you can use pip-installed PyTorch instead of downloading libtorch separately:
 
 ```bash
-pip install torch==2.7.1
+pip install torch==2.10.0
 export LIBTORCH_USE_PYTORCH=1
 export LD_LIBRARY_PATH=$(python3 -c "import torch; print(torch.__path__[0])")/lib:$LD_LIBRARY_PATH
 ```

@@ -118,6 +118,7 @@ impl Device {
     pub fn auto() -> Self {
         #[cfg(feature = "tch-backend")]
         {
+            ensure_torch_cuda_runtime_loaded();
             if tch::Cuda::is_available() {
                 Device::gpu()
             } else {
@@ -135,6 +136,7 @@ impl Device {
     pub fn is_gpu_available() -> bool {
         #[cfg(feature = "tch-backend")]
         {
+            ensure_torch_cuda_runtime_loaded();
             tch::Cuda::is_available()
         }
 
@@ -142,6 +144,50 @@ impl Device {
         {
             true
         }
+    }
+}
+
+#[cfg(feature = "tch-backend")]
+fn ensure_torch_cuda_runtime_loaded() {
+    #[cfg(any(target_os = "linux", target_os = "macos"))]
+    {
+        use std::ffi::{c_void, CString};
+        use std::os::raw::{c_char, c_int};
+        use std::sync::Once;
+
+        // Some linker setups can drop libtorch_cuda from DT_NEEDED when no
+        // symbol is referenced directly. Preloading it here ensures CUDA
+        // backends are registered before availability checks.
+        static INIT: Once = Once::new();
+        INIT.call_once(|| unsafe {
+            extern "C" {
+                fn dlopen(filename: *const c_char, flags: c_int) -> *mut c_void;
+            }
+
+            #[cfg(target_os = "linux")]
+            const RTLD_NOW: c_int = 2;
+            #[cfg(target_os = "linux")]
+            const RTLD_GLOBAL: c_int = 0x100;
+
+            #[cfg(target_os = "macos")]
+            const RTLD_NOW: c_int = 2;
+            #[cfg(target_os = "macos")]
+            const RTLD_GLOBAL: c_int = 0x8;
+
+            #[cfg(target_os = "linux")]
+            let candidates: &[&str] = &["libtorch_cuda.so"];
+            #[cfg(target_os = "macos")]
+            let candidates: &[&str] = &["libtorch_cuda.dylib"];
+
+            for candidate in candidates {
+                if let Ok(name) = CString::new(*candidate) {
+                    let handle = dlopen(name.as_ptr(), RTLD_NOW | RTLD_GLOBAL);
+                    if !handle.is_null() {
+                        break;
+                    }
+                }
+            }
+        });
     }
 }
 

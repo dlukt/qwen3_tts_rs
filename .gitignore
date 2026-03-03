@@ -23,3 +23,6 @@ target
 
 # models for local testing
 models/
+
+# local libtorch unpacked for development/tests
+libtorch/

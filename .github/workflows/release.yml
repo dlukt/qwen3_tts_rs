@@ -14,14 +14,14 @@ jobs:
             name: Linux x86_64
             backend: tch
             asset-name: qwen3-tts-linux-x86_64
-            libtorch-url: https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.7.1%2Bcpu.zip
+            libtorch-url: https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-2.10.0%2Bcpu.zip
             libtorch-archive: libtorch.zip
             bundle-libtorch: true
           - os: ubuntu-latest
             name: Linux x86_64 (CUDA)
             backend: tch
             asset-name: qwen3-tts-linux-x86_64-cuda
-            libtorch-url: https://download.pytorch.org/libtorch/cu128/libtorch-cxx11-abi-shared-with-deps-2.7.1%2Bcu128.zip
+            libtorch-url: https://download.pytorch.org/libtorch/cu128/libtorch-shared-with-deps-2.10.0%2Bcu128.zip
             libtorch-archive: libtorch.zip
             bundle-libtorch: false
           - os: ubuntu-24.04-arm

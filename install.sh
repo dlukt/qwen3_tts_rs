@@ -121,7 +121,7 @@ download_cuda_libtorch() {
     fi
 
     info "Downloading CUDA libtorch (cu128; works on CUDA runtime >= 12.8, including CUDA 13.x drivers)..."
-    local url="https://download.pytorch.org/libtorch/cu128/libtorch-cxx11-abi-shared-with-deps-2.7.1%2Bcu128.zip"
+    local url="https://download.pytorch.org/libtorch/cu128/libtorch-shared-with-deps-2.10.0%2Bcu128.zip"
     local temp_dir
     temp_dir=$(mktemp -d)
 
