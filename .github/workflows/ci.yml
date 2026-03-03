@@ -15,29 +15,12 @@ jobs:
             backend: tch
             libtorch-url: https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-2.10.0%2Bcpu.zip
             libtorch-archive: libtorch.zip
-          - os: ubuntu-24.04-arm
-            name: Linux ARM64 (tch)
-            backend: tch
-            libtorch-url: https://github.com/dlukt/libtorch-releases/releases/download/v2.7.1/libtorch-cxx11-abi-aarch64-2.7.1.tar.gz
-            libtorch-archive: libtorch.tar.gz
-          - os: macos-latest
-            name: macOS ARM64 (tch)
-            backend: tch
-            libtorch-url: https://download.pytorch.org/libtorch/cpu/libtorch-macos-arm64-2.10.0.zip
-            libtorch-archive: libtorch.zip
-          - os: macos-latest
-            name: macOS ARM64 (MLX)
-            backend: mlx
 
     runs-on: ${{ matrix.os }}
     name: Build (${{ matrix.name }})
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Init MLX submodule
-        if: matrix.backend == 'mlx'
-        run: git submodule update --init --recursive
 
       - name: Delete Cargo.lock
         run: rm -f Cargo.lock
@@ -46,11 +29,9 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Download libtorch
-        if: matrix.backend == 'tch'
         run: curl -Lo ${{ matrix.libtorch-archive }} "${{ matrix.libtorch-url }}"
 
       - name: Extract libtorch
-        if: matrix.backend == 'tch'
         run: |
           if [[ "${{ matrix.libtorch-archive }}" == *.zip ]]; then
             unzip -q ${{ matrix.libtorch-archive }}
@@ -58,23 +39,16 @@ jobs:
             tar xzf ${{ matrix.libtorch-archive }}
           fi
 
-      - name: Set linker rpath-link (Linux only)
-        if: runner.os == 'Linux' && matrix.backend == 'tch'
+      - name: Set linker rpath-link
         run: echo "RUSTFLAGS=-C link-arg=-Wl,-rpath-link,${{ github.workspace }}/libtorch/lib" >> "$GITHUB_ENV"
 
-      - name: Build (tch)
-        if: matrix.backend == 'tch'
+      - name: Build
         env:
           LIBTORCH: ${{ github.workspace }}/libtorch
           LIBTORCH_BYPASS_VERSION_CHECK: "1"
         run: cargo build --release
 
-      - name: Build (MLX)
-        if: matrix.backend == 'mlx'
-        run: cargo build --release --no-default-features --features mlx
-
       - name: Build examples
-        if: matrix.backend == 'tch'
         env:
           LIBTORCH: ${{ github.workspace }}/libtorch
           LIBTORCH_BYPASS_VERSION_CHECK: "1"
@@ -88,13 +62,8 @@ jobs:
       - name: Install HuggingFace tools
         run: pip install huggingface_hub transformers
 
-      - name: Set library path (Linux)
-        if: runner.os == 'Linux' && matrix.backend == 'tch'
+      - name: Set library path
         run: echo "LD_LIBRARY_PATH=${{ github.workspace }}/libtorch/lib:$LD_LIBRARY_PATH" >> "$GITHUB_ENV"
-
-      - name: Set library path (macOS)
-        if: runner.os == 'macOS' && matrix.backend == 'tch'
-        run: echo "DYLD_LIBRARY_PATH=${{ github.workspace }}/libtorch/lib:$DYLD_LIBRARY_PATH" >> "$GITHUB_ENV"
 
       - name: Download model
         run: python3 -c "from huggingface_hub import snapshot_download; snapshot_download('Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice', local_dir='models/Qwen3-TTS-12Hz-0.6B-CustomVoice')"

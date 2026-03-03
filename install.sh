@@ -27,7 +27,6 @@ err()   { echo -e "${RED}[error]${NC} $*" >&2; }
 detect_platform() {
     case "$(uname -s)" in
         Linux*)  OS="linux" ;;
-        Darwin*) OS="darwin" ;;
         *)
             err "Unsupported operating system: $(uname -s)"
             exit 1
@@ -36,7 +35,6 @@ detect_platform() {
 
     case "$(uname -m)" in
         x86_64|amd64)    ARCH="x86_64" ;;
-        aarch64|arm64)   ARCH="aarch64" ;;
         *)
             err "Unsupported architecture: $(uname -m)"
             exit 1
@@ -70,7 +68,6 @@ detect_platform() {
 # ---------------------------------------------------------------------------
 resolve_asset() {
     case "${OS}-${ARCH}" in
-        darwin-aarch64)  ASSET_NAME="qwen3-tts-macos-aarch64" ;;
         linux-x86_64)
             if [ -n "$USE_CUDA" ]; then
                 ASSET_NAME="qwen3-tts-linux-x86_64-cuda"
@@ -78,7 +75,6 @@ resolve_asset() {
                 ASSET_NAME="qwen3-tts-linux-x86_64"
             fi
             ;;
-        linux-aarch64)   ASSET_NAME="qwen3-tts-linux-aarch64" ;;
         *)
             err "Unsupported platform: ${OS}-${ARCH}"
             exit 1

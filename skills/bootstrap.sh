@@ -14,7 +14,6 @@ detect_platform() {
 
     case "$(uname -s)" in
     Linux*) os="linux" ;;
-    Darwin*) os="darwin" ;;
     *)
         echo "Error: Unsupported operating system: $(uname -s)" >&2
         exit 1
@@ -23,7 +22,6 @@ detect_platform() {
 
     case "$(uname -m)" in
     x86_64 | amd64) arch="x86_64" ;;
-    aarch64 | arm64) arch="aarch64" ;;
     *)
         echo "Error: Unsupported architecture: $(uname -m)" >&2
         exit 1
@@ -39,12 +37,6 @@ get_asset_name() {
     case "$platform" in
     linux-x86_64)
         echo "qwen3-tts-linux-x86_64"
-        ;;
-    linux-aarch64)
-        echo "qwen3-tts-linux-aarch64"
-        ;;
-    darwin-aarch64)
-        echo "qwen3-tts-macos-aarch64"
         ;;
     *)
         echo "Error: Unsupported platform: ${platform}" >&2
@@ -85,11 +77,6 @@ download_release() {
     cp "${temp_dir}/${asset_name}/tts" "${SCRIPTS_DIR}/tts"
     cp "${temp_dir}/${asset_name}/voice_clone" "${SCRIPTS_DIR}/voice_clone"
     chmod +x "${SCRIPTS_DIR}/tts" "${SCRIPTS_DIR}/voice_clone"
-
-    # Copy mlx.metallib if present (macOS MLX backend)
-    if [ -f "${temp_dir}/${asset_name}/mlx.metallib" ]; then
-        cp "${temp_dir}/${asset_name}/mlx.metallib" "${SCRIPTS_DIR}/mlx.metallib"
-    fi
 
     # Copy libtorch if present (Linux tch backend)
     if [ -d "${temp_dir}/${asset_name}/libtorch" ]; then

@@ -24,17 +24,6 @@ jobs:
             libtorch-url: https://download.pytorch.org/libtorch/cu128/libtorch-shared-with-deps-2.10.0%2Bcu128.zip
             libtorch-archive: libtorch.zip
             bundle-libtorch: false
-          - os: ubuntu-24.04-arm
-            name: Linux ARM64
-            backend: tch
-            asset-name: qwen3-tts-linux-aarch64
-            libtorch-url: https://github.com/dlukt/libtorch-releases/releases/download/v2.7.1/libtorch-cxx11-abi-aarch64-2.7.1.tar.gz
-            libtorch-archive: libtorch.tar.gz
-            bundle-libtorch: true
-          - os: macos-latest
-            name: macOS ARM64
-            backend: mlx
-            asset-name: qwen3-tts-macos-aarch64
 
     runs-on: ${{ matrix.os }}
     name: Build (${{ matrix.name }})
@@ -44,12 +33,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        if: matrix.backend == 'tch'
-
-      - uses: actions/checkout@v4
-        if: matrix.backend == 'mlx'
-        with:
-          submodules: recursive
 
       - name: Delete Cargo.lock
         run: rm -f Cargo.lock
@@ -58,11 +41,9 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Download libtorch
-        if: matrix.backend == 'tch'
         run: curl -Lo ${{ matrix.libtorch-archive }} "${{ matrix.libtorch-url }}"
 
       - name: Extract libtorch
-        if: matrix.backend == 'tch'
         run: |
           if [[ "${{ matrix.libtorch-archive }}" == *.zip ]]; then
             unzip -q ${{ matrix.libtorch-archive }}
@@ -71,19 +52,13 @@ jobs:
           fi
 
       - name: Set linker flags (Linux only)
-        if: matrix.backend == 'tch' && runner.os == 'Linux'
         run: echo "RUSTFLAGS=-C link-arg=-Wl,-rpath-link,${{ github.workspace }}/libtorch/lib -C link-arg=-Wl,-rpath,\$ORIGIN/libtorch/lib" >> "$GITHUB_ENV"
 
-      - name: Build (tch)
-        if: matrix.backend == 'tch'
+      - name: Build
         env:
           LIBTORCH: ${{ github.workspace }}/libtorch
           LIBTORCH_BYPASS_VERSION_CHECK: "1"
         run: cargo build --release
-
-      - name: Build (mlx)
-        if: matrix.backend == 'mlx'
-        run: cargo build --release --no-default-features --features mlx
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -121,9 +96,6 @@ jobs:
           mkdir ${{ matrix.asset-name }}
           cp target/release/tts target/release/voice_clone ${{ matrix.asset-name }}/
           cp -r tokenizers ${{ matrix.asset-name }}/tokenizers
-          if [ "${{ matrix.backend }}" = "mlx" ]; then
-            cp target/release/build/qwen3_tts-*/out/lib/mlx.metallib ${{ matrix.asset-name }}/
-          fi
           if [ "${{ matrix.bundle-libtorch }}" = "true" ]; then
             cp -r libtorch ${{ matrix.asset-name }}/libtorch
           fi

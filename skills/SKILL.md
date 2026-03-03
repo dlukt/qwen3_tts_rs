@@ -31,15 +31,13 @@ Available reference speakers: `trump`, `elon_musk`.
 - **`tts`** — When the user wants to generate speech from text using a named speaker (Vivian, Ryan, etc.). Supports English and Chinese.
 - **`voice_clone`** — When the user wants to clone a specific voice from a reference audio file and generate new speech in that voice. If the user asks to clone a voice by speaker name (e.g., "speak like Trump", "use Elon Musk's voice"), check `{baseDir}/scripts/reference_audio/` for a matching `<speaker_name>.wav` and `<speaker_name>.txt` pair, and use ICL mode with both files.
 
-## Environment Setup (Linux only)
+## Environment Setup
 
-On Linux, the binaries require libtorch shared libraries. Set the library path before running:
+The binaries require libtorch shared libraries. Set the library path before running:
 
 ```bash
 export LD_LIBRARY_PATH={baseDir}/scripts/libtorch/lib:$LD_LIBRARY_PATH
 ```
-
-On macOS, no environment setup is needed (the binaries use the MLX backend).
 
 ## Text-to-Speech
 
@@ -48,16 +46,6 @@ Generate speech audio from text with a named speaker.
 ```bash
 LD_LIBRARY_PATH={baseDir}/scripts/libtorch/lib:$LD_LIBRARY_PATH \
   {baseDir}/scripts/tts \
-  {baseDir}/scripts/models/Qwen3-TTS-12Hz-0.6B-CustomVoice \
-  "<text>" \
-  <speaker> \
-  <language>
-```
-
-On macOS, omit the `LD_LIBRARY_PATH` prefix:
-
-```bash
-{baseDir}/scripts/tts \
   {baseDir}/scripts/models/Qwen3-TTS-12Hz-0.6B-CustomVoice \
   "<text>" \
   <speaker> \
@@ -105,8 +93,6 @@ LD_LIBRARY_PATH={baseDir}/scripts/libtorch/lib:$LD_LIBRARY_PATH \
   <language> \
   ["<reference_text>"]
 ```
-
-On macOS, omit the `LD_LIBRARY_PATH` prefix.
 
 ### Parameters
 
@@ -193,8 +179,6 @@ LD_LIBRARY_PATH={baseDir}/scripts/libtorch/lib:$LD_LIBRARY_PATH \
   english \
   "$REF_TEXT"
 ```
-
-On macOS, omit the `LD_LIBRARY_PATH` prefix.
 
 ### 4. Return the Output
 
