@@ -1,11 +1,10 @@
 [package]
 name = "qwen3_tts"
-version = "0.1.4"
+version = "0.1.0"
 edition = "2021"
-authors = ["Michael Yuan <michael@secondstate.io>"]
 description = "Rust port of Qwen3 TTS - Text-to-Speech model"
 license = "Apache-2.0"
-repository = "https://github.com/juntao/qwen3_tts_rs"
+repository = "https://github.com/dlukt/qwen3_tts_rs"
 keywords = ["tts", "text-to-speech", "qwen", "ai", "machine-learning"]
 categories = ["multimedia::audio", "science"]
 exclude = ["models/", "*.wav", ".DS_Store"]
