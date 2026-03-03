@@ -18,7 +18,7 @@ jobs:
           - os: ubuntu-24.04-arm
             name: Linux ARM64 (tch)
             backend: tch
-            libtorch-url: https://github.com/second-state/libtorch-releases/releases/download/v2.7.1/libtorch-cxx11-abi-aarch64-2.7.1.tar.gz
+            libtorch-url: https://github.com/dlukt/libtorch-releases/releases/download/v2.7.1/libtorch-cxx11-abi-aarch64-2.7.1.tar.gz
             libtorch-archive: libtorch.tar.gz
           - os: macos-latest
             name: macOS ARM64 (tch)

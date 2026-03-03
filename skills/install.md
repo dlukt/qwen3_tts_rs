@@ -17,7 +17,7 @@ SKILL_DIR="${HOME}/.openclaw/skills/audio_tts"
 mkdir -p "$SKILL_DIR"
 
 # Clone the repo
-git clone --depth 1 https://github.com/second-state/qwen3_tts_rs.git /tmp/qwen3-tts-repo
+git clone --depth 1 https://github.com/dlukt/qwen3_tts_rs.git /tmp/qwen3-tts-repo
 cp -r /tmp/qwen3-tts-repo/skills/* "$SKILL_DIR"
 mkdir -p "$SKILL_DIR/scripts"
 cp -r /tmp/qwen3-tts-repo/reference_audio "$SKILL_DIR/scripts/reference_audio"
@@ -43,7 +43,7 @@ ls -la output.wav
 
 If automatic download fails, manually download the components:
 
-1. Go to https://github.com/second-state/qwen3_tts_rs/releases/latest
+1. Go to https://github.com/dlukt/qwen3_tts_rs/releases/latest
 2. Download the zip for your platform:
    - `qwen3-tts-linux-x86_64.zip` (Linux x86_64, includes libtorch)
    - `qwen3-tts-linux-aarch64.zip` (Linux ARM64, includes libtorch)
@@ -59,7 +59,7 @@ If automatic download fails, manually download the components:
    ```
 7. Copy reference audio files from the repo into the scripts directory:
    ```bash
-   git clone --depth 1 https://github.com/second-state/qwen3_tts_rs.git /tmp/qwen3-tts-repo
+   git clone --depth 1 https://github.com/dlukt/qwen3_tts_rs.git /tmp/qwen3-tts-repo
    cp -r /tmp/qwen3-tts-repo/reference_audio ~/.openclaw/skills/audio_tts/scripts/reference_audio
    rm -rf /tmp/qwen3-tts-repo
    ```
@@ -88,7 +88,7 @@ If automatic download fails, manually download the components:
 ### Download Failed
 Check network connectivity:
 ```bash
-curl -I "https://github.com/second-state/qwen3_tts_rs/releases/latest"
+curl -I "https://github.com/dlukt/qwen3_tts_rs/releases/latest"
 ```
 
 ### Unsupported Platform

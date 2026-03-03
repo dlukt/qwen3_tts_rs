@@ -1,10 +1,10 @@
 #!/bin/bash
 # Installer for Qwen3 TTS Rust — downloads binaries, models, and reference audio
-# Usage: curl -sSf https://raw.githubusercontent.com/second-state/qwen3_tts_rs/main/install.sh | bash
+# Usage: curl -sSf https://raw.githubusercontent.com/dlukt/qwen3_tts_rs/main/install.sh | bash
 
 set -e
 
-REPO="second-state/qwen3_tts_rs"
+REPO="dlukt/qwen3_tts_rs"
 INSTALL_DIR="./qwen3_tts_rs"
 
 # ---------------------------------------------------------------------------

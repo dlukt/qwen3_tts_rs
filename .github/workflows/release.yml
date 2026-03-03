@@ -28,7 +28,7 @@ jobs:
             name: Linux ARM64
             backend: tch
             asset-name: qwen3-tts-linux-aarch64
-            libtorch-url: https://github.com/second-state/libtorch-releases/releases/download/v2.7.1/libtorch-cxx11-abi-aarch64-2.7.1.tar.gz
+            libtorch-url: https://github.com/dlukt/libtorch-releases/releases/download/v2.7.1/libtorch-cxx11-abi-aarch64-2.7.1.tar.gz
             libtorch-archive: libtorch.tar.gz
             bundle-libtorch: true
           - os: macos-latest

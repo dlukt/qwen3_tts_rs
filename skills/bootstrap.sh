@@ -4,7 +4,7 @@
 
 set -e
 
-REPO="second-state/qwen3_tts_rs"
+REPO="dlukt/qwen3_tts_rs"
 SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS_DIR="${SKILL_DIR}/scripts"
 MODELS_DIR="${SCRIPTS_DIR}/models"

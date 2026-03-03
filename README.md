@@ -11,16 +11,16 @@ A Rust implementation of the Qwen3 Text-to-Speech (TTS) model inference. This pr
 Supports two backends: **libtorch** (via the `tch` crate, cross-platform with optional CUDA) and **MLX** (Apple Silicon native via Metal GPU). Loads model weights directly from safetensors files and re-implements the complete neural network forward pass in Rust.
 
 Learn more:
-* [A Rust implementation / CLI](https://github.com/second-state/qwen3_asr_rs) for Qwen3's ASR (Automatic Speech Recognition or Speech-to-Text) models
-* An OpenAI compatible [API server for audio / speech](https://github.com/second-state/qwen3_audio_api/tree/main/rust)
-* An OpenClaw SKILL for voice generation. Copy and Paste to your lobster to [instsll it](https://raw.githubusercontent.com/second-state/qwen3_tts_rs/refs/heads/main/skills/install.md)
+* [A Rust implementation / CLI](https://github.com/dlukt/qwen3_asr_rs) for Qwen3's ASR (Automatic Speech Recognition or Speech-to-Text) models
+* An OpenAI compatible [API server for audio / speech](https://github.com/dlukt/qwen3_audio_api/tree/main/rust)
+* An OpenClaw SKILL for voice generation. Copy and Paste to your lobster to [instsll it](https://raw.githubusercontent.com/dlukt/qwen3_tts_rs/refs/heads/main/skills/install.md)
 
 ## Quick Start
 
 Run the installer to download binaries, models, and reference audio for your platform:
 
 ```bash
-curl -sSf https://raw.githubusercontent.com/second-state/qwen3_tts_rs/main/install.sh | bash
+curl -sSf https://raw.githubusercontent.com/dlukt/qwen3_tts_rs/main/install.sh | bash
 ```
 
 The installer detects your OS, CPU, and NVIDIA GPU (if present), then sets up everything in `./qwen3_tts_rs/`. Once complete, generate speech:
@@ -216,7 +216,7 @@ brew install cmake ffmpeg
 Build:
 
 ```bash
-git clone https://github.com/second-state/qwen3_tts_rs.git
+git clone https://github.com/dlukt/qwen3_tts_rs.git
 cd qwen3_tts_rs
 git submodule update --init --recursive
 cargo build --release --no-default-features --features mlx
@@ -256,7 +256,7 @@ sudo apt-get install -y ffmpeg
 #### Build
 
 ```bash
-git clone https://github.com/second-state/qwen3_tts_rs.git
+git clone https://github.com/dlukt/qwen3_tts_rs.git
 cd qwen3_tts_rs
 cargo build --release
 ```
